@@ -59,6 +59,12 @@ deformationSymTensor3DVolume -in atlas_data/commonspace_D2_mean500_dtitk.nii.gz 
 TVEigenSystem -in $subject_dir/D1_warped.nii.gz -type FSL
 TVEigenSystem -in $subject_dir/D2_warped.nii.gz -type FSL
 
+### Fix the header to prevent segmentation fault
+fslcpgeom $subject_dir/fsl_V1 $subject_dir/D1_warped_V1
+fslcpgeom $subject_dir/fsl_V1 $subject_dir/D2_warped_V1
+fslcpgeom $subject_dir/D1_warped_L1 $subject_dir/D1_warped_V1 -d
+fslcpgeom $subject_dir/D1_warped_L1 $subject_dir/D2_warped_V1 -d
+
 ### Quite likely the data the warped atlas orientations need to be flipped in x (orientation issue between FSL/DTITK) ###
 fslsplit $subject_dir/D1_warped_V1 $subject_dir/D1_warped_V1_ -t
 fslmaths $subject_dir/D1_warped_V1_0000 -mul -1 $subject_dir/D1_warped_V1_0000_xflipped
